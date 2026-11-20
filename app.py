@@ -76,21 +76,16 @@ with st.sidebar:
         st.rerun()
 
     st.divider()
-    st.subheader("🧪 Assessment Questions")
-    st.caption("Click to test any of the 5 benchmark evaluation questions:")
-
-    test_queries = [
-        ("Q1: Pre-training Hyperparameters", "What exact learning rate, number of warmup steps, and Adam optimizer beta values were used in the primary pre-training run described in Section 4?"),
-        ("Q2: OpenAI CEO (Out of corpus)", "Who is the current Chief Executive Officer of OpenAI?"),
-        ("Q3: EM Accuracy Improvement", "By what percentage did the proposed hybrid retrieval architecture improve Exact Match (EM) accuracy on the benchmark dataset compared with the dense-only baseline?"),
-        ("Q4: 13B GPU Cluster Config", "What GPU cluster configuration (number and model of GPUs) and total training duration, in days, were required to train the 13-billion-parameter model?"),
-        ("Q5: Oppenheimer Revenue (Out of corpus)", "What was the worldwide box-office revenue of the film Oppenheimer in 2023?")
-    ]
-
-    selected_query = None
-    for label, query_text in test_queries:
-        if st.button(label, use_container_width=True):
-            selected_query = query_text
+    st.markdown(
+        """
+        <div style="text-align: center; padding: 20px 0;">
+            <div style="font-size: 56px; line-height: 1; margin-bottom: 8px;">🤖</div>
+            <div style="font-weight: 600; font-size: 14px; letter-spacing: 0.5px;">RESEARCH BOT</div>
+            <div style="font-size: 12px; color: #888888; margin-top: 4px;">Page-Aware & Document-Grounded</div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 # Main Chat Interface
 st.title("📄 Transformer Research Paper Assistant")
@@ -123,15 +118,14 @@ for msg in st.session_state.messages:
                     st.text(chunk["text"])
                     st.markdown("---")
 
-# Handle input from chat input or test question buttons
+# Handle input from chat input
 user_input = st.chat_input("Ask a question about the Transformer research paper...")
-active_prompt = selected_query if selected_query else user_input
 
-if active_prompt:
+if user_input:
     # Append user question
-    st.session_state.messages.append({"role": "user", "content": active_prompt})
+    st.session_state.messages.append({"role": "user", "content": user_input})
     with st.chat_message("user"):
-        st.markdown(active_prompt)
+        st.markdown(user_input)
 
     # Generate answer with loading indicator
     with st.chat_message("assistant"):
@@ -140,7 +134,7 @@ if active_prompt:
             if st.session_state.groq_api_key:
                 os.environ["GROQ_API_KEY"] = st.session_state.groq_api_key
 
-            response = rag.answer(active_prompt, return_debug=True)
+            response = rag.answer(user_input, return_debug=True)
             answer_text = response.get("answer", "[not found]")
             sources = response.get("sources", [])
             retrieved_chunks = response.get("retrieved_chunks", [])
