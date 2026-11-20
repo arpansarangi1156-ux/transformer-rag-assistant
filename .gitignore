@@ -1,0 +1,25 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Environment variables
+.env
+
+# Vector store cache / persistent files
+chroma_db/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Streamlit
+.streamlit/
+
+# OS metadata
+.DS_Store
+Thumbs.db

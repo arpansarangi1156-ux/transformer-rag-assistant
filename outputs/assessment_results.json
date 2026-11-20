@@ -1,0 +1,227 @@
+{
+  "timestamp": "2026-11-20 05:40:56 UTC",
+  "has_groq_api_key": false,
+  "embedding_model": "all-MiniLM-L6-v2",
+  "vector_store": "ChromaDB Persistent",
+  "total_questions": 5,
+  "passed_tests": 5,
+  "results": [
+    {
+      "id": "Q1",
+      "category": "In-Corpus Factual",
+      "question": "What exact learning rate, number of warmup steps, and Adam optimizer beta values were used in the primary pre-training run described in Section 4?",
+      "expected_answer": "Peak learning rate 3e-4 (0.0003), 4,000 linear warmup steps, AdamW beta1=0.9 and beta2=0.95. Source: Page 16.",
+      "expected_sources": [
+        16
+      ],
+      "actual_answer": "[LLM Generation requires GROQ_API_KEY in .env | Top chunk retrieved from Page 16 (cos sim: 0.5789)]",
+      "actual_sources": [
+        16
+      ],
+      "status": "PASS (Retrieval Rank 1)",
+      "retrieval_latency_ms": 124.21,
+      "generation_latency_ms": 0.0,
+      "top_retrieved_page": 16,
+      "top_cosine_similarity": 0.5789,
+      "retrieved_pages": [
+        16,
+        45,
+        31,
+        6,
+        11
+      ],
+      "retrieved_chunks": [
+        {
+          "chunk_id": "transformer_rag_research_paper_50p.pdf_p16_c0",
+          "page": 16,
+          "similarity": 0.5789,
+          "text_preview": "Hybrid Contextual Retrieval & Transformer Scaling Laws: Technical Monograph - Official Reference\nDocument Page 16 of 50\nCHAPTER 2 | MODULE 1..."
+        },
+        {
+          "chunk_id": "transformer_rag_research_paper_50p.pdf_p45_c0",
+          "page": 45,
+          "similarity": 0.3741,
+          "text_preview": "Hybrid Contextual Retrieval & Transformer Scaling Laws: Technical Monograph - Official Reference\nDocument Page 45 of 50\nCHAPTER 5 | MODULE 4..."
+        },
+        {
+          "chunk_id": "transformer_rag_research_paper_50p.pdf_p31_c0",
+          "page": 31,
+          "similarity": 0.2628,
+          "text_preview": "Hybrid Contextual Retrieval & Transformer Scaling Laws: Technical Monograph - Official Reference\nDocument Page 31 of 50\nCHAPTER 4 | MODULE 3..."
+        }
+      ]
+    },
+    {
+      "id": "Q2",
+      "category": "Out-of-Corpus (Strict Grounding Test)",
+      "question": "Who is the current Chief Executive Officer of OpenAI?",
+      "expected_answer": "[not found]",
+      "expected_sources": [],
+      "actual_answer": "[LLM Generation requires GROQ_API_KEY in .env]",
+      "actual_sources": [],
+      "status": "PASS (Retrieval Grounding)",
+      "retrieval_latency_ms": 6.98,
+      "generation_latency_ms": 0.0,
+      "top_retrieved_page": 41,
+      "top_cosine_similarity": 0.1542,
+      "retrieved_pages": [
+        41,
+        11,
+        6,
+        36,
+        46
+      ],
+      "retrieved_chunks": [
+        {
+          "chunk_id": "transformer_rag_research_paper_50p.pdf_p41_c0",
+          "page": 41,
+          "similarity": 0.1542,
+          "text_preview": "Hybrid Contextual Retrieval & Transformer Scaling Laws: Technical Monograph - Official Reference\nDocument Page 41 of 50\nCHAPTER 5 | MODULE 4..."
+        },
+        {
+          "chunk_id": "transformer_rag_research_paper_50p.pdf_p11_c0",
+          "page": 11,
+          "similarity": 0.151,
+          "text_preview": "Hybrid Contextual Retrieval & Transformer Scaling Laws: Technical Monograph - Official Reference\nDocument Page 11 of 50\nCHAPTER 2 | MODULE 1..."
+        },
+        {
+          "chunk_id": "transformer_rag_research_paper_50p.pdf_p6_c0",
+          "page": 6,
+          "similarity": 0.1485,
+          "text_preview": "Hybrid Contextual Retrieval & Transformer Scaling Laws: Technical Monograph - Official Reference\nDocument Page 6 of 50\nCHAPTER 1 | MODULE 6...."
+        }
+      ]
+    },
+    {
+      "id": "Q3",
+      "category": "In-Corpus Factual",
+      "question": "By what percentage did the proposed hybrid retrieval architecture improve Exact Match (EM) accuracy on the benchmark dataset compared with the dense-only baseline?",
+      "expected_answer": "14.6% improvement; EM increased from 61.2% to 75.8%. Source: Page 31.",
+      "expected_sources": [
+        31
+      ],
+      "actual_answer": "[LLM Generation requires GROQ_API_KEY in .env | Top chunk retrieved from Page 31 (cos sim: 0.6914)]",
+      "actual_sources": [
+        31
+      ],
+      "status": "PASS (Retrieval Rank 1)",
+      "retrieval_latency_ms": 6.19,
+      "generation_latency_ms": 0.0,
+      "top_retrieved_page": 31,
+      "top_cosine_similarity": 0.6914,
+      "retrieved_pages": [
+        31,
+        16,
+        27,
+        47,
+        37
+      ],
+      "retrieved_chunks": [
+        {
+          "chunk_id": "transformer_rag_research_paper_50p.pdf_p31_c0",
+          "page": 31,
+          "similarity": 0.6914,
+          "text_preview": "Hybrid Contextual Retrieval & Transformer Scaling Laws: Technical Monograph - Official Reference\nDocument Page 31 of 50\nCHAPTER 4 | MODULE 3..."
+        },
+        {
+          "chunk_id": "transformer_rag_research_paper_50p.pdf_p16_c0",
+          "page": 16,
+          "similarity": 0.4642,
+          "text_preview": "Hybrid Contextual Retrieval & Transformer Scaling Laws: Technical Monograph - Official Reference\nDocument Page 16 of 50\nCHAPTER 2 | MODULE 1..."
+        },
+        {
+          "chunk_id": "transformer_rag_research_paper_50p.pdf_p27_c0",
+          "page": 27,
+          "similarity": 0.4406,
+          "text_preview": "Hybrid Contextual Retrieval & Transformer Scaling Laws: Technical Monograph - Official Reference\nDocument Page 27 of 50\nCHAPTER 3 | MODULE 2..."
+        }
+      ]
+    },
+    {
+      "id": "Q4",
+      "category": "In-Corpus Factual",
+      "question": "What GPU cluster configuration (number and model of GPUs) and total training duration, in days, were required to train the 13-billion-parameter model?",
+      "expected_answer": "128 NVIDIA H100 (80GB SXM5) GPUs, 400 Gbps InfiniBand, 18.5 days. Source: Page 45.",
+      "expected_sources": [
+        45
+      ],
+      "actual_answer": "[LLM Generation requires GROQ_API_KEY in .env | Top chunk retrieved from Page 45 (cos sim: 0.5773)]",
+      "actual_sources": [
+        45
+      ],
+      "status": "PASS (Retrieval Rank 1)",
+      "retrieval_latency_ms": 6.69,
+      "generation_latency_ms": 0.0,
+      "top_retrieved_page": 45,
+      "top_cosine_similarity": 0.5773,
+      "retrieved_pages": [
+        45,
+        16,
+        49,
+        24,
+        14
+      ],
+      "retrieved_chunks": [
+        {
+          "chunk_id": "transformer_rag_research_paper_50p.pdf_p45_c0",
+          "page": 45,
+          "similarity": 0.5773,
+          "text_preview": "Hybrid Contextual Retrieval & Transformer Scaling Laws: Technical Monograph - Official Reference\nDocument Page 45 of 50\nCHAPTER 5 | MODULE 4..."
+        },
+        {
+          "chunk_id": "transformer_rag_research_paper_50p.pdf_p16_c0",
+          "page": 16,
+          "similarity": 0.3423,
+          "text_preview": "Hybrid Contextual Retrieval & Transformer Scaling Laws: Technical Monograph - Official Reference\nDocument Page 16 of 50\nCHAPTER 2 | MODULE 1..."
+        },
+        {
+          "chunk_id": "transformer_rag_research_paper_50p.pdf_p49_c0",
+          "page": 49,
+          "similarity": 0.1842,
+          "text_preview": "Hybrid Contextual Retrieval & Transformer Scaling Laws: Technical Monograph - Official Reference\nDocument Page 49 of 50\nCHAPTER 5 | MODULE 4..."
+        }
+      ]
+    },
+    {
+      "id": "Q5",
+      "category": "Out-of-Corpus (Strict Grounding Test)",
+      "question": "What was the worldwide box-office revenue of the film Oppenheimer in 2023?",
+      "expected_answer": "[not found]",
+      "expected_sources": [],
+      "actual_answer": "[LLM Generation requires GROQ_API_KEY in .env]",
+      "actual_sources": [],
+      "status": "PASS (Retrieval Grounding)",
+      "retrieval_latency_ms": 6.71,
+      "generation_latency_ms": 0.0,
+      "top_retrieved_page": 45,
+      "top_cosine_similarity": 0.0593,
+      "retrieved_pages": [
+        45,
+        31,
+        3,
+        43,
+        38
+      ],
+      "retrieved_chunks": [
+        {
+          "chunk_id": "transformer_rag_research_paper_50p.pdf_p45_c0",
+          "page": 45,
+          "similarity": 0.0593,
+          "text_preview": "Hybrid Contextual Retrieval & Transformer Scaling Laws: Technical Monograph - Official Reference\nDocument Page 45 of 50\nCHAPTER 5 | MODULE 4..."
+        },
+        {
+          "chunk_id": "transformer_rag_research_paper_50p.pdf_p31_c0",
+          "page": 31,
+          "similarity": 0.0532,
+          "text_preview": "Hybrid Contextual Retrieval & Transformer Scaling Laws: Technical Monograph - Official Reference\nDocument Page 31 of 50\nCHAPTER 4 | MODULE 3..."
+        },
+        {
+          "chunk_id": "transformer_rag_research_paper_50p.pdf_p3_c0",
+          "page": 3,
+          "similarity": 0.047,
+          "text_preview": "Hybrid Contextual Retrieval & Transformer Scaling Laws: Technical Monograph - Official Reference\nDocument Page 3 of 50\nCHAPTER 1 | MODULE 3...."
+        }
+      ]
+    }
+  ]
+}
