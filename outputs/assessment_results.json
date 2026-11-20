@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-11-20 05:40:56 UTC",
-  "has_groq_api_key": false,
+  "timestamp": "2026-11-20 05:52:42 UTC",
+  "has_groq_api_key": true,
   "embedding_model": "all-MiniLM-L6-v2",
   "vector_store": "ChromaDB Persistent",
   "total_questions": 5,
@@ -14,13 +14,13 @@
       "expected_sources": [
         16
       ],
-      "actual_answer": "[LLM Generation requires GROQ_API_KEY in .env | Top chunk retrieved from Page 16 (cos sim: 0.5789)]",
+      "actual_answer": "The primary pre-training run used a peak learning rate of 3e-4 (0.0003), exactly 4,000 linear warmup steps, and AdamW beta values of beta_1 = 0.9 and beta_2 = 0.95. (Page 16)",
       "actual_sources": [
         16
       ],
-      "status": "PASS (Retrieval Rank 1)",
-      "retrieval_latency_ms": 124.21,
-      "generation_latency_ms": 0.0,
+      "status": "PASS",
+      "retrieval_latency_ms": 284.6,
+      "generation_latency_ms": 765.39,
       "top_retrieved_page": 16,
       "top_cosine_similarity": 0.5789,
       "retrieved_pages": [
@@ -57,11 +57,11 @@
       "question": "Who is the current Chief Executive Officer of OpenAI?",
       "expected_answer": "[not found]",
       "expected_sources": [],
-      "actual_answer": "[LLM Generation requires GROQ_API_KEY in .env]",
+      "actual_answer": "[not found]",
       "actual_sources": [],
-      "status": "PASS (Retrieval Grounding)",
-      "retrieval_latency_ms": 6.98,
-      "generation_latency_ms": 0.0,
+      "status": "PASS",
+      "retrieval_latency_ms": 21.72,
+      "generation_latency_ms": 468.14,
       "top_retrieved_page": 41,
       "top_cosine_similarity": 0.1542,
       "retrieved_pages": [
@@ -100,13 +100,13 @@
       "expected_sources": [
         31
       ],
-      "actual_answer": "[LLM Generation requires GROQ_API_KEY in .env | Top chunk retrieved from Page 31 (cos sim: 0.6914)]",
+      "actual_answer": "The proposed hybrid retrieval architecture improved Exact Match (EM) accuracy by 14.6% compared to the dense-only baseline. (Page 31)",
       "actual_sources": [
         31
       ],
-      "status": "PASS (Retrieval Rank 1)",
-      "retrieval_latency_ms": 6.19,
-      "generation_latency_ms": 0.0,
+      "status": "PASS",
+      "retrieval_latency_ms": 21.3,
+      "generation_latency_ms": 630.89,
       "top_retrieved_page": 31,
       "top_cosine_similarity": 0.6914,
       "retrieved_pages": [
@@ -145,13 +145,13 @@
       "expected_sources": [
         45
       ],
-      "actual_answer": "[LLM Generation requires GROQ_API_KEY in .env | Top chunk retrieved from Page 45 (cos sim: 0.5773)]",
+      "actual_answer": "The 13-billion-parameter model was trained using a cluster of 128 NVIDIA H100 (80GB SXM5) GPUs, with a total training duration of 18.5 days. (Page 45)",
       "actual_sources": [
         45
       ],
-      "status": "PASS (Retrieval Rank 1)",
-      "retrieval_latency_ms": 6.69,
-      "generation_latency_ms": 0.0,
+      "status": "PASS",
+      "retrieval_latency_ms": 21.04,
+      "generation_latency_ms": 4578.03,
       "top_retrieved_page": 45,
       "top_cosine_similarity": 0.5773,
       "retrieved_pages": [
@@ -188,11 +188,11 @@
       "question": "What was the worldwide box-office revenue of the film Oppenheimer in 2023?",
       "expected_answer": "[not found]",
       "expected_sources": [],
-      "actual_answer": "[LLM Generation requires GROQ_API_KEY in .env]",
+      "actual_answer": "[not found]",
       "actual_sources": [],
-      "status": "PASS (Retrieval Grounding)",
-      "retrieval_latency_ms": 6.71,
-      "generation_latency_ms": 0.0,
+      "status": "PASS",
+      "retrieval_latency_ms": 55.13,
+      "generation_latency_ms": 15998.06,
       "top_retrieved_page": 45,
       "top_cosine_similarity": 0.0593,
       "retrieved_pages": [

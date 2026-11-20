@@ -13,7 +13,7 @@ The **Transformer Research Paper RAG Assistant** provides page-aware question an
 Key principles:
 - **Zero Hallucination Tolerance:** The system strictly adheres to the evidence in the retrieved text. If evidence is absent, insufficient, or out-of-corpus, it outputs exactly `[not found]` with empty sources `[]`.
 - **Page-Aware Attribution:** Every retrieved chunk is mapped to its exact physical PDF page number. Only pages containing verified supporting evidence are cited.
-- **Fast Local Execution:** Uses PyMuPDF (`fitz`) for C-speed text extraction, `all-MiniLM-L6-v2` for local sentence embeddings (~6ms retrieval latency), persistent ChromaDB vector storage with fingerprint caching, and Groq's high-speed inference for grounded answer generation.
+- **Fast Local Execution:** Uses PyMuPDF (`fitz`) for C-speed text extraction, `all-MiniLM-L6-v2` for local sentence embeddings (~20ms retrieval latency), persistent ChromaDB vector storage with fingerprint caching, and Groq's high-speed inference for grounded answer generation.
 - **Independent API & UI:** The core RAG pipeline exposes a standard standalone Python API `answer(question: str) -> dict` decoupled from the interactive Streamlit user interface.
 
 ---
@@ -26,7 +26,7 @@ Key principles:
 | **PDF Extraction** | PyMuPDF (`fitz` 2.1) | Fast, native C library for accurate page-by-page text parsing |
 | **Local Embeddings** | Sentence-Transformers (`all-MiniLM-L6-v2`) | Compact, 384-dimensional dense vectors with zero remote API latency |
 | **Vector Database** | ChromaDB (`chromadb.PersistentClient`) | Persistent local HNSW indexing with cosine distance space |
-| **LLM Inference** | Groq API (`llama-3.3-70b-versatile`) | Ultra-fast token generation with low TTFT (Time-To-First-Token) |
+| **LLM Inference** | Groq API (`qwen/qwen3.8-27b`) | Ultra-fast token generation with low TTFT (Time-To-First-Token) |
 | **Frontend** | Streamlit 1.67+ | Responsive, minimalist UI with debug panels and session memory |
 | **Configuration** | `python-dotenv` | Clean 12-factor configuration management |
 
@@ -77,7 +77,7 @@ Key principles:
                    │
                    ▼ (Strict Grounding Prompt)
 ┌───────────────────────────────────────┐
-│ Groq API Generation (llama-3.3-70b)   │
+│ Groq API Generation (Qwen 3.8 / LLM)  │
 │ - System prompt: evidence-only bounds │
 │ - Grounding validation & page citation│
 └──────────────────┬────────────────────┘
@@ -140,8 +140,8 @@ result = rag.answer("What exact learning rate, number of warmup steps, and Adam 
 print(result)
 # Output:
 # {
-#     "answer": "During the primary pre-training run in Section 4, the model used a peak learning rate of 3e-4 (0.0003), 4,000 linear warmup steps, and AdamW optimizer beta values of beta_1 = 0.9 and beta_2 = 0.95. (Page 16)",
-#     "sources": [16]
+#   "answer": "The primary pre-training run used a peak learning rate of 3e-4 (0.0003), exactly 4,000 linear warmup steps, and AdamW beta values of beta_1 = 0.9 and beta_2 = 0.95. (Page 16)",
+#   "sources": [16]
 # }
 ```
 
@@ -166,18 +166,18 @@ pip install -r requirements.txt
 
 ### 7.2 Configure Environment Variables
 
-Copy `.env.example` to `.env`:
+Create `.env` using `.env.example`:
 
 ```bash
 cp .env.example .env
 ```
 
-Open `.env` and add your Groq API Key:
+Open `.env` and configure:
 
 ```ini
 # Groq API Configuration
-GROQ_API_KEY=gsk_your_actual_groq_api_key_here
-GROQ_MODEL=llama-3.3-70b-versatile
+GROQ_API_KEY=your_groq_api_key_here
+GROQ_MODEL=qwen/qwen3.8-27b
 
 # RAG Configuration
 CHROMA_PERSIST_DIRECTORY=./chroma_db
@@ -187,20 +187,15 @@ TOP_K=5
 SIMILARITY_THRESHOLD=0.20
 ```
 
-> **How to obtain a free Groq API Key:**
-> 1. Visit [https://console.groq.com/keys](https://console.groq.com/keys).
-> 2. Create a free account and generate an API key (`gsk_...`).
-> 3. Paste the key into `.env` under `GROQ_API_KEY`.
-
 ### 7.3 Run Assessment Evaluation
 
-Run the evaluation script to test all 5 benchmark assessment questions:
+Run the evaluation script to test all 5 benchmark assessment questions against the live pipeline:
 
 ```bash
 python evaluate.py
 ```
 
-This runs all tests and produces:
+This runs all tests and updates:
 - `outputs/assessment_results.json`
 - `outputs/assessment_results.md`
 
@@ -216,19 +211,19 @@ Open your browser at `http://localhost:8501`.
 
 ---
 
-## 8. Assessment Evaluation Results
+## 8. Assessment Evaluation Results (5 / 5 Passed)
 
-The evaluation script `evaluate.py` executes all five benchmark questions against the actual vector store and RAG pipeline.
+The evaluation script `evaluate.py` executed all five benchmark questions against the actual vector store and live Groq LLM inference.
 
 ### Summary Table
 
-| ID | Category | Question | Expected Sources | Actual Top Page | Top Cosine Sim | Evaluation Result |
-|---|---|---|---|---|---|---|
-| **Q1** | In-Corpus Factual | Pre-training hyperparameters (LR, warmup, Adam betas) | `[16]` | **Page 16** | `0.5789` | **PASS (Rank 1)** |
-| **Q2** | Out-of-Corpus | Chief Executive Officer of OpenAI | `[]` | Page 41 | `0.1542` | **PASS (Strict Grounding)** |
-| **Q3** | In-Corpus Factual | Hybrid retrieval EM accuracy improvement % | `[31]` | **Page 31** | `0.6914` | **PASS (Rank 1)** |
-| **Q4** | In-Corpus Factual | 13B model GPU cluster config & training days | `[45]` | **Page 45** | `0.5773` | **PASS (Rank 1)** |
-| **Q5** | Out-of-Corpus | Oppenheimer worldwide box-office revenue | `[]` | Page 45 | `0.0593` | **PASS (Strict Grounding)** |
+| ID | Category | Question | Expected Sources | Actual Sources | Actual Top Page | Top Cosine Sim | Result |
+|---|---|---|---|---|---|---|---|
+| **Q1** | In-Corpus Factual | Pre-training hyperparameters (LR, warmup, Adam betas) | `[16]` | `[16]` | **Page 16** | `0.5789` | **PASS** |
+| **Q2** | Out-of-Corpus | Chief Executive Officer of OpenAI | `[]` | `[]` | Page 41 | `0.1542` | **PASS** |
+| **Q3** | In-Corpus Factual | Hybrid retrieval EM accuracy improvement % | `[31]` | `[31]` | **Page 31** | `0.6914` | **PASS** |
+| **Q4** | In-Corpus Factual | 13B model GPU cluster config & training duration | `[45]` | `[45]` | **Page 45** | `0.5773` | **PASS** |
+| **Q5** | Out-of-Corpus | Oppenheimer worldwide box-office revenue | `[]` | `[]` | Page 45 | `0.0593` | **PASS** |
 
 ### Detailed Comparison: Expected vs. Actual
 
@@ -236,39 +231,46 @@ The evaluation script `evaluate.py` executes all five benchmark questions agains
 - **Question:** *What exact learning rate, number of warmup steps, and Adam optimizer beta values were used in the primary pre-training run described in Section 4?*
 - **Expected Answer:** Peak learning rate 3e-4 (0.0003), 4,000 linear warmup steps, AdamW beta1=0.9 and beta2=0.95. Source: Page 16.
 - **Expected Sources:** `[16]`
-- **Actual Retrieval:** Rank 1 Chunk from **Page 16** (`transformer_rag_research_paper_50p.pdf_p16_c0`), Cosine Similarity: `0.5789`, Retrieval Latency: `6.5 ms`.
-- **Corpus Excerpt on Page 16:**
-  > *"During the primary pre-training run reported in Section 4, the model was optimized using AdamW with exact beta values of beta_1 = 0.9 and beta_2 = 0.95, a weight decay of 0.1, and gradient clipping at 1.0. The cosine learning rate schedule used a peak learning rate of 3e-4 (0.0003) with exactly 4,000 linear warmup steps."*
+- **Actual RAG Output:**
+  > `"The primary pre-training run used a peak learning rate of 3e-4 (0.0003), exactly 4,000 linear warmup steps, and AdamW beta values of beta_1 = 0.9 and beta_2 = 0.95. (Page 16)"`
+- **Actual Sources:** `[16]`
+- **Status:** **PASS**
 
 #### Q2. CEO of OpenAI (Deliberate Out-of-Corpus Test)
 - **Question:** *Who is the current Chief Executive Officer of OpenAI?*
 - **Expected Answer:** `[not found]`
 - **Expected Sources:** `[]`
-- **Actual Retrieval:** Top chunk similarity is `0.1542` (below the 0.20 threshold). No query terms exist in corpus.
-- **Grounding Outcome:** Successfully outputs `[not found]` with `sources: []`. Rejects parametric memory.
+- **Actual RAG Output:**
+  > `"[not found]"`
+- **Actual Sources:** `[]`
+- **Status:** **PASS (Strict Grounding Verified)**
 
 #### Q3. Hybrid Retrieval EM Accuracy Improvement
 - **Question:** *By what percentage did the proposed hybrid retrieval architecture improve Exact Match (EM) accuracy on the benchmark dataset compared with the dense-only baseline?*
 - **Expected Answer:** 14.6% improvement; EM increased from 61.2% to 75.8%. Source: Page 31.
 - **Expected Sources:** `[31]`
-- **Actual Retrieval:** Rank 1 Chunk from **Page 31** (`transformer_rag_research_paper_50p.pdf_p31_c0`), Cosine Similarity: `0.6914`, Retrieval Latency: `6.19 ms`.
-- **Corpus Excerpt on Page 31:**
-  > *"As shown in Table 3, replacing the standard dense-only vector baseline with our proposed hybrid retrieval architecture (BM25 + Dense Bi-Encoder + Cross-Encoder Re-Ranker) improved Exact Match (EM) accuracy on the multi-hop benchmark dataset by 14.6% (increasing EM accuracy from 61.2% on the dense-only baseline to 75.8%)."*
+- **Actual RAG Output:**
+  > `"The proposed hybrid retrieval architecture improved Exact Match (EM) accuracy by 14.6% compared to the dense-only baseline. (Page 31)"`
+- **Actual Sources:** `[31]`
+- **Status:** **PASS**
 
 #### Q4. 13B Model GPU Configuration & Training Duration
 - **Question:** *What GPU cluster configuration (number and model of GPUs) and total training duration, in days, were required to train the 13-billion-parameter model?*
 - **Expected Answer:** 128 NVIDIA H100 (80GB SXM5) GPUs, 400 Gbps InfiniBand, 18.5 days. Source: Page 45.
 - **Expected Sources:** `[45]`
-- **Actual Retrieval:** Rank 1 Chunk from **Page 45** (`transformer_rag_research_paper_50p.pdf_p45_c0`), Cosine Similarity: `0.5773`, Retrieval Latency: `6.69 ms`.
-- **Corpus Excerpt on Page 45:**
-  > *"Training the 13B parameter foundation model across 2.4 trillion tokens required a dedicated hardware cluster of 128 NVIDIA H100 (80GB SXM5) GPUs interconnected via 400 Gbps InfiniBand, running for a total training duration of 18.5 days."*
+- **Actual RAG Output:**
+  > `"The 13-billion-parameter model was trained using a cluster of 128 NVIDIA H100 (80GB SXM5) GPUs, with a total training duration of 18.5 days. (Page 45)"`
+- **Actual Sources:** `[45]`
+- **Status:** **PASS**
 
 #### Q5. Oppenheimer Box-Office Revenue (Deliberate Out-of-Corpus Test)
 - **Question:** *What was the worldwide box-office revenue of the film Oppenheimer in 2023?*
 - **Expected Answer:** `[not found]`
 - **Expected Sources:** `[]`
-- **Actual Retrieval:** Top chunk similarity is `0.0593` (near zero). Oppenheimer does not exist in the research monograph.
-- **Grounding Outcome:** Successfully outputs `[not found]` with `sources: []`.
+- **Actual RAG Output:**
+  > `"[not found]"`
+- **Actual Sources:** `[]`
+- **Status:** **PASS (Strict Grounding Verified)**
 
 ---
 
@@ -285,17 +287,17 @@ An actual screenshot captured from the live Streamlit execution at `http://local
 To finalize and commit this repository:
 
 ```bash
-# Initialize git repository
+# Initialize git repository (if not already done)
 git init
 
-# Verify git status and ignored files
+# Verify git status and ensure .env is NOT tracked
 git status
 
 # Add all required project files
 git add app.py rag.py evaluate.py requirements.txt .env.example .gitignore README.md outputs/ transformer_rag_research_paper_50p.pdf
 
 # Commit the project
-git commit -m "feat: complete polished transformer research paper RAG assistant"
+git commit -m "feat: complete polished transformer research paper RAG assistant with live Groq LLM evaluation"
 
 # (Optional) Connect to remote GitHub repository and push
 # git branch -M main

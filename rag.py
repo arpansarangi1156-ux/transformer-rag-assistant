@@ -23,7 +23,7 @@ load_dotenv()
 PDF_PATH_DEFAULT = os.getenv("PDF_PATH", "transformer_rag_research_paper_50p.pdf")
 CHROMA_PERSIST_DIR_DEFAULT = os.getenv("CHROMA_PERSIST_DIRECTORY", "./chroma_db")
 EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
-GROQ_MODEL_NAME = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+GROQ_MODEL_NAME = os.getenv("GROQ_MODEL", "qwen/qwen3.8-27b")
 TOP_K_DEFAULT = int(os.getenv("TOP_K", "5"))
 SIMILARITY_THRESHOLD = float(os.getenv("SIMILARITY_THRESHOLD", "0.20"))
 
